@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Agile Picture Book</title>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+       main { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+        .content { display: flex; align-items: center; justify-content: center; width: 100%; }
+        .arrow { font-size: 2rem; cursor: pointer; padding: 20px; user-select: none; }
+        .image-container { display: flex; flex-direction: column; align-items: center; }
+        img { width: 512px; height: 512px; object-fit: cover; }
+        h3 { color: #333; margin-bottom: 5px; }
+        p, ul { margin-top: 0; font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; line-height: 1.6;}
+    </style>
+
+ </head>
+ <body class="is-preload">
+    <!-- Wrapper -->
+      <div id="wrapper">
+    <!-- Header -->
+      <header id="header">
+      <div class="inner">
+    
+      <a href="index.html" class="logo">
+      <span class="symbol"><img src="images/Indarien_Logo_Colour.png" alt="Indarien LTD" /></span><span class="title">Indarien</span>
+      </a>
+      <nav>
+        <ul>
+                <li><a href="#menu">Menu</a></li>
+        </ul>
+      </nav>
+</div>
+</header>
+<!-- Menu -->
+<nav id="menu">
+<h2>Menu</h2>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="agile.html">Agile Picture Book</a></li>
+<li><a href="march.html">March</a></li>
+</ul>
+</nav>
+
+<!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <h1 align="center">The Agile Picture Book</h1>
+          <h2 align="center">Simon Gibson</h2>
+            <div class="content">
+
+    <div class="arrow" onclick="prevPage()">&#9665;</div>
+    <div class="image-container">
+        <img id="main-image" src="images/agile/00597.png" alt="The Agile Picture Book">
+        <p id="image-text">The Agile Picture Book</p>
+    </div>
+    <div class="arrow" onclick="nextPage()">&#9655;</div>
+</div>
+</div>
+</div>
+</div>
+      <footer id="footer">
+        <div class="inner">
+          <!-- <section>
+           <h2>Follow</h2>
+            <ul class="icons">
+              <li><a href="https://twitter.com/psymeg" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+              <li><a href=""https://github.com/psymeg" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+            </ul>
+          </section> -->
+          <ul class="copyright">
+            <li>&copy; 2025 Indarien Publishing Aotearoa New Zealand. All rights reserved</li>
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+          </ul>
+        </div>
+      </footer>
+
+</div>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/header.js"></script>
+<script>
+    const images = [
+       { src: "images/agile/01141.png", text: "Mika walks into the lobby. It is her first day at A Corporation. She gazes around the sumptuous lobby. Can she find the DevOps engineers?" },
+       { src: "images/agile/00806.png", text: "Mika gazes around the lobby and sees a group of young people. Are they the DevOps engineers? She shakes her head. Those are the interns waiting hopefully." },
+       { src: "images/agile/01116.png", text: "Mika notices a virtual receptionist. The receptionist is polite and tells her to take the elevator. The DevOps engineers are waiting for her." },
+       { src: "images/agile/00789.png", text: "The elevator doors open and Mika gets in. Who is that in the elevator? Is it a DevOps engineer? No, that is the CEO heading off to buy some more black t-shirts." },
+       { src: "images/agile/00818.png", text: "Mika gets out of the elevator and stalks through the darkness. Is that a DevOps engineer squinting at the blue screen? No, that is a wintel engineer trying to reboot a server." },
+       { src: "images/agile/00827.png", text: "Mika peers into a room. Who is that sitting in the dark? Is it a DevOps engineer? No, it is a Project Manager praying to the GANTT charts." },
+       { src: "images/agile/00843.png", text: "At the end of a corridor Mika comes to a strange figure. Could that be a DevOps engineer? Or is it a product owner wiggling his fingers wildly at some widgets on the wall? Mika shudders and walks on in search of the DevOps engineers." },
+       { src: "images/agile/00870.png", text: "Who is that liberally festooning the room with post-it notes? Is it a DevOps engineer? No, it is a Scrum Master coaching, facilitating, removing impediments and leading by example using different stances and skills." },
+       { src: "images/agile/00856.png", text: "Gazing out the window Mika spots a person far off in the distance, perched high on the top of a mountain. Is it a dev ops engineer? Spotting hundreds of GIT commits and pull requests, Mika realizes it is a developer." },
+       { src: "images/agile/00886.png", text: "Around the corner Mika notices a person busily dropping tables. Could it be a DevOps engineer? No, it is a DBA, opportunistically optimizing the databases." },
+       { src: "images/agile/00895.png", text: "Who are those people tracking down R Language dependencies? Are they DevOps engineers? No, they are Data Scientists untangling package conflicts." },
+       { src: "images/agile/00905.png", text: "Who is that person waving his arms wildly about? It can't be a DevOps engineer, can it? No, it is the CIO practicing for the board meeting." },
+       { src: "images/agile/00810.png", text: "Someone is coming her way and checking her badge. Could it be a DevOPs engineer? No, it is a Security Manager patrolling the depths." },
+       { src: "images/agile/00909.png", text: "Mika turns a corner and is startled to see a trio of grey-shirted men marching forebodingly down the corridor. Surely they are not DevOps engineers.  No, they are Security Consultants working on their social engineering skills." },
+       { src: "images/agile/00983.png", text: "Mika peers through a glass window into a room. Is that a DevOps engineer? No, it is a test engineer, creatively breaking the software." },
+       { src: "images/agile/00920.png", text: "Mika peeks into a breakout nook. Is that a DevOps engineer? No, it is an Environment Manager soothing the troubled souls of the Project Managers." },
+       { src: "images/agile/00926.png", text: "Mika strolls past a photocopier. Is that a DevOps engineer in the corner? No, it is an Applications Support Specialist on the phone helping a user reset their password." },
+       { src: "images/agile/00936.png", text: "Look at all those people on their phones, could they be dev ops engineers? No, that is the help desk telling people to turn it off and on again." },
+       { src: "images/agile/01004.png", text: "Mika steps into a dusty room. Could that be a DevOps engineer? Sadly not. It is a Platform Engineer rebasing their home directory. " },
+       { src: "images/agile/00945.png", text: "Could that be a DevOps Engineer leaving a meeting room? No, it is a Product Manager taking responsibility and communicating and collaborating with stakeholders regarding the next sprint." },
+       { src: "images/agile/00996.png", text: "Mika walks down a silent hallway. There are no signs of the DevOps engineers. In the distance she hears cheering. Could it be? She hurries on excitedly." },
+       { src: "images/agile/01157.png", text: "The laughter and vibrant voices grow stronger. Mike slowly opens a heavy door. Are they DevOps Engineers? No, it is a Senior Solutions Consultant networking feverishly. Mika trades socials." },
+       { src: "images/agile/01160.png", text: "Glad to escape the consultants, Mika skips down a hallway and opens another door. Could that be a DevOps Engineer? Mika gets very excited, has she found her tribe? No, it is a storage engineer replacing dead hard drives." },
+       { src: "images/agile/01171.png", text: "Another floor, Mika squints, ever hopeful. Is it a DevOps engineer or is it a solution architect taking software diagrams to a new level of complexity. Mika shrugs in disappointment. It is the latter." },
+       { src: "images/agile/01182.png", text: "So many post-its, are they out of control? Luckily, the release train engineer has it all under control. Relieved and still hopeful, Mika perseveres on." },
+       { src: "images/agile/01197.png", text: "Wow, a DevOps Engineer, thinks Mika. Thank the maker! On closer inspection though the creature reveals its true nature – it is a Staff Software Engineer in the wild. Mika posts to her socials and moves on." },
+       { src: "images/agile/01205.png", text: "The noise, the heat, the smell. Is it a DevOps Engineer? Unlikely. Mika has met one of these before. A storage engineer! Mika smiles and agrees to meet up for a drink later in the week. Salt of the earth, these storage engineers." },
+       { src: "images/agile/01210.png", text: "Opening another door, Mika sees a group of people collaborating on a spreadsheet. Are these the DevOps Engineers? No, they are the Business Analysts. Mika runs out the door before she has to share a latte with one of the scarier specimens." },
+       { src: "images/agile/01215.png", text: "Mika walks into a large open space. There is a trembling resonating from the floor. These cannot be DevOps Engineers. HR are screening candidates. Mika smiles and walks on. " },
+       { src: "images/agile/01234.png", text: "Mika swipes her access card and is surprised when the door swooshes open and reveals a strange figure hovering above the floor. Is it an overlord or are these research engineers? Mika smells ozone and smiles. She is getting closer. She climbs the stairs to another level." },
+       { src: "images/agile/01070.png", text: "Mika opens the door to the roof. Who are those people chasing butterflies? Are they DevOps Engineers? Yes, they are." }
+        ];
+    let currentIndex = 0;
+
+    function updateImage() {
+        document.getElementById("main-image").src = images[currentIndex].src;
+        document.getElementById("image-text").innerText = images[currentIndex].text;
+    }
+
+    function prevPage() {
+        currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+        updateImage();
+    }
+
+    function nextPage() {
+        currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+        updateImage();
+    }
+</script>
+</body>
+</html>
