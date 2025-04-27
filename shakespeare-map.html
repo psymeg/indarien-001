@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping Shakespeare</title>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/maps.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <script src="assets/js/leaflet.js"></script>
+ </head>
+ <body class="is-preload">
+    <!-- Wrapper -->
+      <div id="wrapper">
+    <!-- Header -->
+      <header id="header">
+      <div class="inner">
+    
+      <a href="index.html" class="logo">
+      <span class="symbol"><img src="images/Indarien_Logo_Colour.png" alt="Indarien LTD" /></span><span class="title">Indarien</span>
+      </a>
+      <nav>
+        <ul>
+                <li><a href="#menu">Menu</a></li>
+        </ul>
+      </nav>
+</div>
+</header>
+<!-- Menu -->
+<nav id="menu">
+<h2>Menu</h2>
+<ul>
+<li><a href="index.html">Home</a></li>
+<li><a href="agile.html">Agile Picture Book</a></li>
+<li><a href="march.html">March</a></li>
+<li><a href="shakespeare-map.html">Mapping Shakespeare</a></li>
+</ul>
+</nav>
+
+<!-- Main -->
+      <div id="main">
+        <div class="inner">
+          <h1 align="center">Mapping Shakespeare</h1>
+          <h2 align="center">A ChatGPT Mini Project</h2>
+            <div class="content"> 
+    <div id="map" style="height: 600px"></div>
+
+    <script>
+        var map = L.map('map', {
+            center: [45.0, 10.0], // Europe-centered
+            zoom: 4
+        });
+
+        // Old-fashioned tile layer (Open source)
+        L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 18,
+        }).addTo(map);
+
+
+        // Markers
+        var plays = [
+            {
+                name: "Romeo and Juliet",
+                coords: [45.4384, 10.9916], // Verona
+                quote: "\"For never was a story of more woe / Than this of Juliet and her Romeo.\""
+            },
+            {
+                name: "Hamlet",
+                coords: [55.6847, 12.5936], // Elsinore (Helsingør)
+                quote: "\"To be, or not to be: that is the question.\""
+            },
+            {
+                name: "Macbeth",
+                coords: [56.4907, -4.2026], // Scotland
+                quote: "\"Fair is foul, and foul is fair.\""
+            },
+            {
+                name: "Othello",
+                coords: [45.4408, 12.3155], // Venice
+                quote: "\"O, beware, my lord, of jealousy; / It is the green-eyed monster.\""
+            },
+            {
+                name: "Julius Caesar",
+                coords: [41.9028, 12.4964], // Rome
+                quote: "\"Et tu, Brute?\""
+            },
+            {
+                name: "The Tempest",
+                coords: [37.0, 14.0], // Somewhere Mediterranean
+                quote: "\"We are such stuff / As dreams are made on.\""
+            },
+
+            {
+                name: "Twelfth Night",
+                coords: [42.5, 18.0], // Illyria (roughly Dubrovnik area)
+                quote: "\"If music be the food of love, play on.\""
+            },
+
+
+            {
+               name: "King Lear",
+               coords: [51.1290, 1.3080], // Dover
+               quote: "\"Blow, winds, and crack your cheeks! Rage! Blow!\""
+            },
+
+            {
+               name: "Titus Andronicus",
+               coords: [41.9028, 12.4964], // Rome
+               quote: "\"O, why should wrath be mute, and fury dumb?\""
+            },
+   
+            {
+               name: "Coriolanus",
+               coords: [41.7150, 12.6600], // Corioli (near Rome)
+               quote: "\"Nature teaches beasts to know their friends.\""
+            },
+           
+            {
+               name: "The Merry Wives of Windsor",
+               coords: [51.4800, -0.6000], // Windsor
+               quote: "\"Why, then the world’s mine oyster.\""
+            },
+
+            {
+               name: "Antony and Cleopatra",
+               coords: [31.2001, 29.9187], // Alexandria
+               quote: "\"Age cannot wither her, nor custom stale her infinite variety.\""
+            },
+           
+            {
+               name: "The Two Noble Kinsmen",
+               coords: [38.3250, 23.3187], // Thebes
+               quote: "\"We are one another’s wife, ever begetting new births of love.\""
+            },
+
+            {
+               name: "The Comedy of Errors",
+               coords: [37.9390, 27.3410],
+               quote: "\"Am I in earth, in heaven, or in hell?\""
+            },
+            
+            {
+               name: "The Taming of the Shrew",
+               coords: [45.4064, 11.8768],
+               quote: "\"If I be waspish, best beware my sting.\""
+            },
+
+            {
+              name: "Love’s Labour’s Lost",
+              coords: [42.8184, -1.6440],
+              quote: "\"They have been at a great feast of languages, and stolen the scraps.\""
+            },
+
+            {
+              name: "Much Ado About Nothing",
+              coords: [38.1938, 15.5540],
+              quote: "\"I do love nothing in the world so well as you.\""
+            },
+       
+            {
+              name: "Troilus and Cressida",
+              coords: [39.9578, 26.2389],
+              quote: "\"The common curse of mankind, folly and ignorance.\""
+            },
+
+            {
+              name: "All’s Well That Ends Well",
+              coords: [42.6256, 2.2845],
+              quote: "\"Love all, trust a few, do wrong to none.\""
+            },
+
+            {
+              name: "Pericles, Prince of Tyre",
+              coords: [33.2700, 35.2033],
+              quote: "\"Few love to hear the sins they love to act.\""
+            }
+
+        ];
+
+        plays.forEach(function(play) {
+            var marker = L.marker(play.coords).addTo(map);
+            marker.bindPopup("<b>" + play.name + "</b><br><i>" + play.quote + "</i>");
+        });
+
+        // Character Movements (simple lines)
+        var movements = [
+            [[45.4408, 12.3155], [35.1856, 33.3823]], // Othello: Venice -> Cyprus
+            [[54.4, 10.0], [55.6847, 12.5936]], // Hamlet: Wittenberg (approx) -> Elsinore
+        ];
+        movements.forEach(function(path) {
+            L.polyline(path, {color: 'black', weight: 2, opacity: 0.6, dashArray: '5,5'}).addTo(map);
+        });
+
+    </script>
+</div>
+</div>
+</div>
+      <footer id="footer">
+        <div class="inner">
+          <!-- <section>
+           <h2>Follow</h2>
+            <ul class="icons">
+              <li><a href="https://twitter.com/psymeg" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
+              <li><a href=""https://github.com/psymeg" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
+            </ul>
+          </section> -->
+          <ul class="copyright">
+            <li>&copy; 2025 Indarien Publishing Aotearoa New Zealand. All rights reserved</li>
+            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+          </ul>
+        </div>
+      </footer>
+
+</div>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script> 
+<script src="assets/js/header.js"></script> 
+<script src="assets/js/leaflet.js"></script>
+
+</body>
+</html>
