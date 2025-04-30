@@ -16,7 +16,6 @@
     <!-- Header -->
       <header id="header">
       <div class="inner">
-    
       <a href="index.html" class="logo">
       <span class="symbol"><img src="images/Indarien_Logo_Colour.png" alt="Indarien LTD" /></span><span class="title">Indarien</span>
       </a>
@@ -58,131 +57,122 @@
             maxZoom: 18,
         }).addTo(map);
 
+// =============================
+// Shakespeare’s Birthplace (Orange marker)
+// =============================
 
+L.marker([52.1917, -1.7073], {icon: L.icon({
+    iconUrl: 'https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32]
+})}).addTo(map).bindPopup("<b>Shakespeare’s Birthplace</b><br>Stratford-upon-Avon<br><em>\"When we are born, we cry that we are come to this great stage of fools.\"</em>");
+
+// =============================
+// Plays — Locations + Quotes + Genres
+// =============================
+
+const plays = [
+    // Tragedies (RED)
+
+    { name: "Hamlet", coords: [55.0386, 12.6136], quote: "\"To be, or not to be: that is the question.\"", color: 'red' },
+    { name: "Macbeth", coords: [57.4778, -4.2247], quote: "\"Is this a dagger which I see before me?\"", color: 'red' },
+    { name: "King Lear", coords: [51.1290, 1.3080], quote: "\"How sharper than a serpent’s tooth it is to have a thankless child.\"", color: 'red' },
+    { name: "Othello", coords: [45.4408, 12.3155], quote: "\"O, beware, my lord, of jealousy; It is the green-eyed monster.\"", color: 'red' },
+    { name: "Romeo and Juliet", coords: [45.4384, 10.9916], quote: "\"A rose by any other name would smell as sweet.\"", color: 'red' },
+    { name: "Julius Caesar", coords: [41.9028, 12.4964], quote: "\"Friends, Romans, countrymen, lend me your ears.\"", color: 'red' },
+    { name: "Coriolanus", coords: [41.9038, 12.4963], quote: "\"Nature teaches beasts to know their friends.\"", color: 'red' },
+    { name: "Titus Andronicus", coords: [41.9010, 12.4975], quote: "\"These are their names, and thus are they delivered.\"", color: 'red' },
+    { name: "Troilus and Cressida", coords: [39.9570, 26.2389], quote: "\"The common curse of mankind, folly and ignorance.\"", color: 'red' },
+    { name: "Antony and Cleopatra", coords: [31.2001, 29.9187], quote: "\"Age cannot wither her, nor custom stale her infinite variety.\"", color: 'red' },
+    { name: "Timon of Athens", coords: [37.9838, 23.7275], quote: "\"I’ll teach you how to flow.\"", color: 'red' },
+
+    // Comedies (GREEN)
+
+    { name: "A Midsummer Night’s Dream", coords: [37.9838, 23.7275], quote: "\"The course of true love never did run smooth.\"", color: 'green' },
+    { name: "The Tempest", coords: [37.0000, 14.0000], quote: "\"We are such stuff as dreams are made on.\"", color: 'green' },
+    { name: "As You Like It", coords: [52.3840, -1.5646], quote: "\"All the world’s a stage.\"", color: 'green' },
+    { name: "Twelfth Night", coords: [42.6629, 18.0944], quote: "\"If music be the food of love, play on.\"", color: 'green' },
+    { name: "The Merchant of Venice", coords: [45.4408, 12.3155], quote: "\"The quality of mercy is not strained.\"", color: 'green' },
+    { name: "Much Ado About Nothing", coords: [38.1938, 15.5540], quote: "\"I do love nothing in the world so well as you.\"", color: 'green' },
+    { name: "The Comedy of Errors", coords: [37.9497, 27.3639], quote: "\"Am I in earth, in heaven, or in hell?\"", color: 'green' },
+    { name: "The Taming of the Shrew", coords: [45.4064, 11.8768], quote: "\"If I be waspish, best beware my sting.\"", color: 'green' },
+    { name: "The Merry Wives of Windsor", coords: [51.4800, -0.6076], quote: "\"Why, then the world’s mine oyster.\"", color: 'green' },
+    { name: "Love’s Labour’s Lost", coords: [42.9833, -2.4167], quote: "\"They have been at a great feast of languages, and stolen the scraps.\"", color: 'green' },
+    { name: "All’s Well That Ends Well", coords: [44.5500, 4.8333], quote: "\"Love all, trust a few, do wrong to none.\"", color: 'green' },
+    { name: "The Two Gentlemen of Verona", coords: [45.4384, 10.9916], quote: "\"They do not love that do not show their love.\"", color: 'green' },
+    { name: "The Two Noble Kinsmen", coords: [37.9838, 23.7275], quote: "\"We are one another’s wife, ever begetting new births of love.\"", color: 'green' },
+    { name: "Measure for Measure", coords: [48.2082, 16.3738], quote: "\"Our doubts are traitors.\"", color: 'green' },
+
+    // Histories (BLUE)
+
+    { name: "Henry IV Part 1", coords: [52.7073, -2.7541], quote: "\"Out of this nettle, danger, we pluck this flower, safety.\"", color: 'blue' },
+    { name: "Henry IV Part 2", coords: [51.5074, -0.1278], quote: "\"Uneasy lies the head that wears a crown.\"", color: 'blue' },
+    { name: "Henry V", coords: [49.4944, 0.1079], quote: "\"Once more unto the breach, dear friends, once more.\"", color: 'blue' },
+    { name: "Henry VI Part 1", coords: [47.9025, 1.9090], quote: "\"Hung be the heavens with black, yield day to night.\"", color: 'blue' },
+    { name: "Henry VI Part 2", coords: [51.5074, -0.1278], quote: "\"The first thing we do, let's kill all the lawyers.\"", color: 'blue' },
+    { name: "Henry VI Part 3", coords: [53.8614, -1.2781], quote: "\"Suspicion always haunts the guilty mind.\"", color: 'blue' },
+    { name: "Henry VIII", coords: [51.5075, -0.1279], quote: "\"O Lord, have mercy upon me.\"", color: 'blue' },
+    { name: "Richard II", coords: [53.2633, -3.1353], quote: "\"For God's sake, let us sit upon the ground and tell sad stories of the death of kings.\"", color: 'blue' },
+    { name: "Richard III", coords: [52.6369, -1.1398], quote: "\"A horse! a horse! my kingdom for a horse!\"", color: 'blue' },
+    { name: "King John", coords: [52.7507, -0.4152], quote: "\"Strong reasons make strong actions.\"", color: 'blue' },
+
+    // Romances (PURPLE)
+
+    { name: "Cymbeline", coords: [51.7144, -4.9400], quote: "\"Fear no more the heat o’ the sun.\"", color: 'purple' },
+    { name: "Pericles, Prince of Tyre", coords: [33.2707, 35.1960], quote: "\"Few love to hear the sins they love to act.\"", color: 'purple' },
+    { name: "The Winter’s Tale", coords: [37.5027, 15.0873], quote: "\"Exit, pursued by a bear.\"", color: 'purple' }
+
+];
+
+// =============================
+// Add play markers to map (color-coded)
+// =============================
+
+plays.forEach(function(play) {
+    const iconUrl = {
+        red: 'https://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png',
+        orange: 'https://maps.gstatic.com/mapfiles/ms2/micons/orange-dot.png',
+        green: 'https://maps.gstatic.com/mapfiles/ms2/micons/green-dot.png',
+        purple: 'https://maps.gstatic.com/mapfiles/ms2/micons/purple-dot.png',
+        blue: 'https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png'
+    }[play.color];
+
+    const markerIcon = L.icon({
+        iconUrl: iconUrl,
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    });
+
+    L.marker(play.coords, {icon: markerIcon}).addTo(map)
+        .bindPopup("<b>" + play.name + "</b><br><em>" + play.quote + "</em>");
+});
+
+// =============================
+// Add Legend box
+// =============================
+
+const legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+    const div = L.DomUtil.create('div', 'info legend');
+    div.innerHTML += '<h4>Legend</h4>';
+    div.innerHTML += '<i style="background: red; width:12px; height:12px; display:inline-block; margin-right:4px;"></i> Tragedy<br>';
+    div.innerHTML += '<i style="background: green; width:12px; height:12px; display:inline-block; margin-right:4px;"></i> Comedy<br>';
+    div.innerHTML += '<i style="background: blue; width:12px; height:12px; display:inline-block; margin-right:4px;"></i> History<br>';
+    div.innerHTML += '<i style="background: purple; width:12px; height:12px; display:inline-block; margin-right:4px;"></i> Romances<br>';
+    div.innerHTML += '<i style="background: orange; width:12px; height:12px; display:inline-block; margin-right:4px;"></i> Birthplace<br>';
+    return div;
+};
+
+var markers = L.markerClusterGroup({ spiderfyOnMaxZoom: true });
+markers.addLayer(L.marker([lat, lng]).bindPopup('Popup text'));
+map.addLayer(markers);
+
+legend.addTo(map);
         // Markers
-        var plays = [
-            {
-                name: "Romeo and Juliet",
-                coords: [45.4384, 10.9916], // Verona
-                quote: "\"For never was a story of more woe / Than this of Juliet and her Romeo.\""
-            },
-            {
-                name: "Hamlet",
-                coords: [55.6847, 12.5936], // Elsinore (Helsingør)
-                quote: "\"To be, or not to be: that is the question.\""
-            },
-            {
-                name: "Macbeth",
-                coords: [56.4907, -4.2026], // Scotland
-                quote: "\"Fair is foul, and foul is fair.\""
-            },
-            {
-                name: "Othello",
-                coords: [45.4408, 12.3155], // Venice
-                quote: "\"O, beware, my lord, of jealousy; / It is the green-eyed monster.\""
-            },
-            {
-                name: "Julius Caesar",
-                coords: [41.9028, 12.4964], // Rome
-                quote: "\"Et tu, Brute?\""
-            },
-            {
-                name: "The Tempest",
-                coords: [37.0, 14.0], // Somewhere Mediterranean
-                quote: "\"We are such stuff / As dreams are made on.\""
-            },
 
-            {
-                name: "Twelfth Night",
-                coords: [42.5, 18.0], // Illyria (roughly Dubrovnik area)
-                quote: "\"If music be the food of love, play on.\""
-            },
-
-
-            {
-               name: "King Lear",
-               coords: [51.1290, 1.3080], // Dover
-               quote: "\"Blow, winds, and crack your cheeks! Rage! Blow!\""
-            },
-
-            {
-               name: "Titus Andronicus",
-               coords: [41.9028, 12.4964], // Rome
-               quote: "\"O, why should wrath be mute, and fury dumb?\""
-            },
-   
-            {
-               name: "Coriolanus",
-               coords: [41.7150, 12.6600], // Corioli (near Rome)
-               quote: "\"Nature teaches beasts to know their friends.\""
-            },
-           
-            {
-               name: "The Merry Wives of Windsor",
-               coords: [51.4800, -0.6000], // Windsor
-               quote: "\"Why, then the world’s mine oyster.\""
-            },
-
-            {
-               name: "Antony and Cleopatra",
-               coords: [31.2001, 29.9187], // Alexandria
-               quote: "\"Age cannot wither her, nor custom stale her infinite variety.\""
-            },
-           
-            {
-               name: "The Two Noble Kinsmen",
-               coords: [38.3250, 23.3187], // Thebes
-               quote: "\"We are one another’s wife, ever begetting new births of love.\""
-            },
-
-            {
-               name: "The Comedy of Errors",
-               coords: [37.9390, 27.3410],
-               quote: "\"Am I in earth, in heaven, or in hell?\""
-            },
-            
-            {
-               name: "The Taming of the Shrew",
-               coords: [45.4064, 11.8768],
-               quote: "\"If I be waspish, best beware my sting.\""
-            },
-
-            {
-              name: "Love’s Labour’s Lost",
-              coords: [42.8184, -1.6440],
-              quote: "\"They have been at a great feast of languages, and stolen the scraps.\""
-            },
-
-            {
-              name: "Much Ado About Nothing",
-              coords: [38.1938, 15.5540],
-              quote: "\"I do love nothing in the world so well as you.\""
-            },
-       
-            {
-              name: "Troilus and Cressida",
-              coords: [39.9578, 26.2389],
-              quote: "\"The common curse of mankind, folly and ignorance.\""
-            },
-
-            {
-              name: "All’s Well That Ends Well",
-              coords: [42.6256, 2.2845],
-              quote: "\"Love all, trust a few, do wrong to none.\""
-            },
-
-            {
-              name: "Pericles, Prince of Tyre",
-              coords: [33.2700, 35.2033],
-              quote: "\"Few love to hear the sins they love to act.\""
-            }
-
-        ];
-
-        plays.forEach(function(play) {
-            var marker = L.marker(play.coords).addTo(map);
-            marker.bindPopup("<b>" + play.name + "</b><br><i>" + play.quote + "</i>");
-        });
 
         // Character Movements (simple lines)
         var movements = [
