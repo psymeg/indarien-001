@@ -9,6 +9,10 @@
     <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <script src="assets/js/leaflet.js"></script>
+    <style>
+      .stack-badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 20px 0; }
+      .stack-badges span { background: #222; color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-family: monospace; }
+    </style>
  </head>
  <body class="is-preload">
     <!-- Wrapper -->
@@ -31,7 +35,10 @@
 <h2>Menu</h2>
 <ul>
   <li><a href="index.html">Home</a></li>
+  <li><a href="emily.html">Emily and the Anteater</a></li>
   <li><a href="agile.html">Agile Picture Book</a></li>
+  <li><a href="hrhandbook.html">The HR Handbook</a></li>
+  <li><a href="repolister.html">Repolister</a></li>
   <li><a href="shakespeare-map.html">Mapping Shakespeare</a></li>
   <li><a href="pay-parity.html">Pay Parity</a></li>
   <li><a href="about.html">About</a></li>
@@ -42,8 +49,17 @@
       <div id="main">
         <div class="inner">
           <h1 align="center">Mapping Shakespeare</h1>
-          <p align="center">Mapping the locations of Shakespeares plays across Europe. Made using Leaflet.js, OpenStreetMap and ChatGPT.</p>
-            <div class="content"> 
+          <h2 align="center">Every play, every setting, one map</h2>
+
+          <p align="center">Shakespeare set his tragedies, comedies, histories, and romances across three dozen real and near-real locations, from Elsinore to Cyprus to the shores of Bohemia. This map plots every play by its principal setting, colour-coded by genre, with a quote from the text at each point.</p>
+
+          <div class="stack-badges">
+            <span>Leaflet.js</span>
+            <span>OpenStreetMap</span>
+            <span>ChatGPT</span>
+          </div>
+
+            <div class="content">
     <div id="map" style="height: 600px"></div>
 
     <script>
@@ -59,7 +75,7 @@
         }).addTo(map);
 
 // =============================
-// Shakespeare’s Birthplace (Orange marker)
+// Shakespeare's Birthplace (Orange marker)
 // =============================
 
 L.marker([52.1917, -1.7073], {icon: L.icon({
@@ -67,7 +83,7 @@ L.marker([52.1917, -1.7073], {icon: L.icon({
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32]
-})}).addTo(map).bindPopup("<b>Shakespeare’s Birthplace</b><br>Stratford-upon-Avon<br><em>\"When we are born, we cry that we are come to this great stage of fools.\"</em>");
+})}).addTo(map).bindPopup("<b>Shakespeare's Birthplace</b><br>Stratford-upon-Avon<br><em>\"When we are born, we cry that we are come to this great stage of fools.\"</em>");
 
 // =============================
 // Plays — Locations + Quotes + Genres
@@ -78,7 +94,7 @@ const plays = [
 
     { name: "Hamlet", coords: [55.0386, 12.6136], quote: "\"Something is rotten in the state of Denmark.\"", color: 'red' },
     { name: "Macbeth", coords: [57.4778, -4.2247], quote: "\"Is this a dagger which I see before me?\"", color: 'red' },
-    { name: "King Lear", coords: [51.1290, 1.3080], quote: "\"How sharper than a serpent’s tooth it is to have a thankless child.\"", color: 'red' },
+    { name: "King Lear", coords: [51.1290, 1.3080], quote: "\"How sharper than a serpent's tooth it is to have a thankless child.\"", color: 'red' },
     { name: "Othello", coords: [45.4408, 12.3155], quote: "\"O, beware, my lord, of jealousy; It is the green-eyed monster.\"", color: 'red' },
     { name: "Romeo and Juliet", coords: [45.4384, 10.9916], quote: "\"A rose by any other name would smell as sweet.\"", color: 'red' },
     { name: "Julius Caesar", coords: [41.9028, 12.4964], quote: "\"Friends, Romans, countrymen, lend me your ears.\"", color: 'red' },
@@ -86,23 +102,23 @@ const plays = [
     { name: "Titus Andronicus", coords: [41.9010, 12.4975], quote: "\"These are their names, and thus are they delivered.\"", color: 'red' },
     { name: "Troilus and Cressida", coords: [39.9570, 26.2389], quote: "\"The common curse of mankind, folly and ignorance.\"", color: 'red' },
     { name: "Antony and Cleopatra", coords: [31.2001, 29.9187], quote: "\"Age cannot wither her, nor custom stale her infinite variety.\"", color: 'red' },
-    { name: "Timon of Athens", coords: [37.9838, 23.7275], quote: "\"I’ll teach you how to flow.\"", color: 'red' },
+    { name: "Timon of Athens", coords: [37.9838, 23.7275], quote: "\"I'll teach you how to flow.\"", color: 'red' },
 
     // Comedies (GREEN)
 
-    { name: "A Midsummer Night’s Dream", coords: [37.9838, 23.7275], quote: "\"The course of true love never did run smooth.\"", color: 'green' },
+    { name: "A Midsummer Night's Dream", coords: [37.9838, 23.7275], quote: "\"The course of true love never did run smooth.\"", color: 'green' },
     { name: "The Tempest", coords: [37.0000, 14.0000], quote: "\"We are such stuff as dreams are made on.\"", color: 'green' },
-    { name: "As You Like It", coords: [52.3840, -1.5646], quote: "\"All the world’s a stage.\"", color: 'green' },
+    { name: "As You Like It", coords: [52.3840, -1.5646], quote: "\"All the world's a stage.\"", color: 'green' },
     { name: "Twelfth Night", coords: [42.6629, 18.0944], quote: "\"If music be the food of love, play on.\"", color: 'green' },
     { name: "The Merchant of Venice", coords: [45.4408, 12.3155], quote: "\"The quality of mercy is not strained.\"", color: 'green' },
     { name: "Much Ado About Nothing", coords: [38.1938, 15.5540], quote: "\"I do love nothing in the world so well as you.\"", color: 'green' },
     { name: "The Comedy of Errors", coords: [37.9497, 27.3639], quote: "\"Am I in earth, in heaven, or in hell?\"", color: 'green' },
     { name: "The Taming of the Shrew", coords: [45.4064, 11.8768], quote: "\"If I be waspish, best beware my sting.\"", color: 'green' },
-    { name: "The Merry Wives of Windsor", coords: [51.4800, -0.6076], quote: "\"Why, then the world’s mine oyster.\"", color: 'green' },
-    { name: "Love’s Labour’s Lost", coords: [42.9833, -2.4167], quote: "\"They have been at a great feast of languages, and stolen the scraps.\"", color: 'green' },
-    { name: "All’s Well That Ends Well", coords: [44.5500, 4.8333], quote: "\"Love all, trust a few, do wrong to none.\"", color: 'green' },
+    { name: "The Merry Wives of Windsor", coords: [51.4800, -0.6076], quote: "\"Why, then the world's mine oyster.\"", color: 'green' },
+    { name: "Love's Labour's Lost", coords: [42.9833, -2.4167], quote: "\"They have been at a great feast of languages, and stolen the scraps.\"", color: 'green' },
+    { name: "All's Well That Ends Well", coords: [44.5500, 4.8333], quote: "\"Love all, trust a few, do wrong to none.\"", color: 'green' },
     { name: "The Two Gentlemen of Verona", coords: [45.4384, 10.9916], quote: "\"They do not love that do not show their love.\"", color: 'green' },
-    { name: "The Two Noble Kinsmen", coords: [37.9838, 23.7275], quote: "\"We are one another’s wife, ever begetting new births of love.\"", color: 'green' },
+    { name: "The Two Noble Kinsmen", coords: [37.9838, 23.7275], quote: "\"We are one another's wife, ever begetting new births of love.\"", color: 'green' },
     { name: "Measure for Measure", coords: [48.2082, 16.3738], quote: "\"Our doubts are traitors.\"", color: 'green' },
 
     // Histories (BLUE)
@@ -120,9 +136,9 @@ const plays = [
 
     // Romances (PURPLE)
 
-    { name: "Cymbeline", coords: [51.7144, -4.9400], quote: "\"Fear no more the heat o’ the sun.\"", color: 'purple' },
+    { name: "Cymbeline", coords: [51.7144, -4.9400], quote: "\"Fear no more the heat o' the sun.\"", color: 'purple' },
     { name: "Pericles, Prince of Tyre", coords: [33.2707, 35.1960], quote: "\"Few love to hear the sins they love to act.\"", color: 'purple' },
-    { name: "The Winter’s Tale", coords: [37.5027, 15.0873], quote: "\"Exit, pursued by a bear.\"", color: 'purple' }
+    { name: "The Winter's Tale", coords: [37.5027, 15.0873], quote: "\"Exit, pursued by a bear.\"", color: 'purple' }
 
 ];
 
@@ -167,13 +183,7 @@ legend.onAdd = function (map) {
     return div;
 };
 
-var markers = L.markerClusterGroup({ spiderfyOnMaxZoom: true });
-markers.addLayer(L.marker([lat, lng]).bindPopup('Popup text'));
-map.addLayer(markers);
-
 legend.addTo(map);
-        // Markers
-
 
         // Character Movements (simple lines)
         var movements = [
@@ -190,15 +200,8 @@ legend.addTo(map);
 </div>
       <footer id="footer">
         <div class="inner">
-          <!-- <section>
-           <h2>Follow</h2>
-            <ul class="icons">
-              <li><a href="https://twitter.com/psymeg" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
-              <li><a href=""https://github.com/psymeg" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
-            </ul>
-          </section> -->
           <ul class="copyright">
-            <li>&copy; 2025 Indarien Publishing Aotearoa New Zealand. All rights reserved</li>
+            <li>&copy; 2026 Indarien Publishing Aotearoa New Zealand. All rights reserved</li>
             <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
           </ul>
         </div>

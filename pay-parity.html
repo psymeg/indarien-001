@@ -6,6 +6,14 @@
     <title>Exploring Pay Parity</title>
     <link rel="stylesheet" href="assets/css/main.css" />
     <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+      .stack-badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 20px 0; }
+      .stack-badges span { background: #222; color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-family: monospace; }
+      .stat-grid { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin: 30px 0; }
+      .stat-grid div { flex: 1; min-width: 180px; max-width: 220px; border: 1px solid #ddd; border-radius: 6px; padding: 16px; text-align: center; }
+      .stat-grid .stat-value { font-size: 1.6rem; font-weight: bold; display: block; }
+      .stat-grid .stat-label { font-size: 0.85rem; color: #555; }
+    </style>
 
  </head>
  <body class="is-preload">
@@ -30,7 +38,10 @@
 <h2>Menu</h2>
 <ul>
   <li><a href="index.html">Home</a></li>
+  <li><a href="emily.html">Emily and the Anteater</a></li>
   <li><a href="agile.html">Agile Picture Book</a></li>
+  <li><a href="hrhandbook.html">The HR Handbook</a></li>
+  <li><a href="repolister.html">Repolister</a></li>
   <li><a href="shakespeare-map.html">Mapping Shakespeare</a></li>
   <li><a href="pay-parity.html">Pay Parity</a></li>
   <li><a href="about.html">About</a></li>
@@ -41,17 +52,44 @@
       <div id="main">
         <div class="inner">
 
-<h1 class="title toc-ignore">Exploring Pay Parity</h1>
+<h1 class="title toc-ignore" align="center">Exploring Pay Parity</h1>
+<h2 align="center">Why Pay Parity Matters: Exploring the Broader Impact</h2>
 
-<h2>Why Pay Parity Matters: Exploring the Broader Impact</h2>
-<p>Recent moves in New Zealand to roll back efforts aimed at achieving pay parity have sparked renewed debate over the true value of wage equality. These graphs take a look at where New Zealand stands in relation to other countries, looking to see if beyond the moral imperative of fairness, pay parity between men and women has any correlatation to economic performance, social wellbeing, and national resilience.</p>
-<p>The World Economic Forum’s Global Gender Gap Report is a rich dataset that provides detailed statistical data regarding wage equality, labor force participation, education, and health outcomes. Data from the excel data set released in 2022 is used. While the report for 2025 is available and can be accessed <a href="https://www.weforum.org/publications/global-gender-gap-report-2025/">here</a>, that report is not in a format easily explorable using the R language used to explore the data and create the graphs below.</p> 
+<p align="center">Recent moves in New Zealand to roll back efforts aimed at achieving pay parity have sparked renewed debate over the true value of wage equality. This analysis looks at where New Zealand stands relative to other countries, and asks whether &mdash; beyond the moral imperative of fairness &mdash; pay parity between men and women correlates with economic performance, social wellbeing, and national resilience.</p>
+
+<div class="stack-badges">
+  <span>R</span>
+  <span>WEF Global Gender Gap Report 2022</span>
+  <span>Pearson correlation</span>
+  <span>Linear regression</span>
+</div>
+
+<div class="stat-grid">
+  <div>
+    <span class="stat-value">0.73</span>
+    <span class="stat-label">NZ pay parity score (rank 33 of 127)</span>
+  </div>
+  <div>
+    <span class="stat-value">0.86</span>
+    <span class="stat-label">NZ labour force participation (rank 41 of 146)</span>
+  </div>
+  <div>
+    <span class="stat-value">&minus;0.4</span>
+    <span class="stat-label">Correlation: pay parity vs. homicide rate</span>
+  </div>
+  <div>
+    <span class="stat-value">B&minus;</span>
+    <span class="stat-label">Overall grade for NZ</span>
+  </div>
+</div>
+
+<p>The World Economic Forum's Global Gender Gap Report is a rich dataset that provides detailed statistical data regarding wage equality, labor force participation, education, and health outcomes. Data from the excel data set released in 2022 is used. While the report for 2025 is available and can be accessed <a href="https://www.weforum.org/publications/global-gender-gap-report-2025/">here</a>, that report is not in a format easily explorable using the R language used to explore the data and create the graphs below.</p> 
 <p>By examining this data, we can start to understand how gender pay parity correlates with broader societal indicators such as life expectancy, crime, and economic opportunity. This raises important questions about the impact of this policy change on ordinary New Zealanders.</p>
 <p><img role="img" src="images/pay_parity_bar_selected.png" width="100%"/></p>
-<p>New Zealand’s gender pay parity score in 2022 was 0.73, ranking 33 out of 127 countries globally according to the World Economic Forum.</p>
-<p>As shown in the bar chart above, New Zealand ranks lower than I expected in wage equality for similar work compared to other developed economies. I would have expected a higher ranking given the country’s progressive reputation and historical efforts in gender equality such as being the first country in the world to give women the vote.</p>
+<p>New Zealand's gender pay parity score in 2022 was 0.73, ranking 33 out of 127 countries globally according to the World Economic Forum.</p>
+<p>As shown in the bar chart above, New Zealand ranks lower than I expected in wage equality for similar work compared to other developed economies. I would have expected a higher ranking given the country's progressive reputation and historical efforts in gender equality such as being the first country in the world to give women the vote.</p>
 <p><img role="img" src="images/labforce_participation_bar.png" width="100%"/></p>
-<p>New Zealand’s Labour Force Participation rate in 2022 was 0.86, ranking 41 out of 146 countries globally according to the World Economic Forum.</p>
+<p>New Zealand's Labour Force Participation rate in 2022 was 0.86, ranking 41 out of 146 countries globally according to the World Economic Forum.</p>
 <p><img role="img" src="images/pay_parity_vs_lifeexp_selected.png" width="100%" /></p>
 <p>We can see that New Zealand ranks well in general compared with the selected countries. It is also worth considering if improving pay parity has an impact on life expectancy.</p>
 <p>A Pearson correlation between pay parity and life expectancy gives a value of 0.07. This is a very weak correlation. Other social, economic,
@@ -61,14 +99,14 @@ legal and healthcare factors likely play a much larger role.</p>
 <p>A linear regression suggests that countries with higher pay parity tend to have higher life expectancy. The model explains 0.5% of the variation in life expectancy, with a p-value of 0.453.</p>
 <p>The above Pearson correlation measures the strength and direction of a linear relationship between two variables whereas linear regression estimates the relationship by fitting a line to the data, allowing for predictions of one variable based on the other. In summary, correlation quantifies how closely two variables move together, whereas regression provides a predictive model.</p>
 <p>In 2022, New Zealand had a pay parity index of 0.74 and a life expectancy of 82.5 years. The country with the lowest pay parity, Chad, had a pay parity index of 0.38 and a life expectancy of 52.5 years.</p>
-<p>That’s a difference of 30 years in life expectancy; which is a striking contrast that underscores how broader social and economic inequalities may intersect with health outcomes.</p>
-<p>This analysis suggests a moderate positive relationship between gender pay parity and life expectancy. While correlation doesn’t imply causation, countries with more equitable pay tend to report better health outcomes.</p>
+<p>That's a difference of 30 years in life expectancy; which is a striking contrast that underscores how broader social and economic inequalities may intersect with health outcomes.</p>
+<p>This analysis suggests a moderate positive relationship between gender pay parity and life expectancy. While correlation doesn't imply causation, countries with more equitable pay tend to report better health outcomes.</p>
 <p><img role="img" src="images/p_payparity_trend.png" width="100%"/></p>
 <p>Looking at trends over time, we can see countries taking different paths. While some countries have steadily moved towards pay parity, others have plateaued or even regressed. This visual reinforces the idea that policy decisions are important. Countries that commit to closing the wage gap often see tangible progress, with those that stall falling behind their peers.</p>
 <p><img role="img" src="images/pay_parity_vs_homicide_log_selected.png" width="100%"/></p>
-<p>The Pearson correlation between pay parity and homicide rate is -0.4. This indicates a moderate negative relationship which means that, as gender pay parity improves, homicide rates tend to decline. While this is not a perfect or causal relationship, it’s statistically meaningful and socially relevant.</p>
+<p>The Pearson correlation between pay parity and homicide rate is -0.4. This indicates a moderate negative relationship which means that, as gender pay parity improves, homicide rates tend to decline. While this is not a perfect or causal relationship, it's statistically meaningful and socially relevant.</p>
 <p><img role="img" src="images/pay_parity_vs_mortality_selected.png" width="100%"/></p>
-<p>The Pearson correlation between pay parity and Under 5 mortality rate is -0.04. This suggests that, at the global level, gender pay parity alone is not a strong predictor of child survival outcomes. It’s likely that a complex mix of factors; including income levels, public health systems, education, and social policy all have a stronger impact on child mortality.</p>
+<p>The Pearson correlation between pay parity and Under 5 mortality rate is -0.04. This suggests that, at the global level, gender pay parity alone is not a strong predictor of child survival outcomes. It's likely that a complex mix of factors; including income levels, public health systems, education, and social policy all have a stronger impact on child mortality.</p>
 <h2>Final Thoughts</h2>
 <p>The data raises a number of thought-provoking questions. While New Zealand performs relatively well on pay parity, it lags behind in key areas such as under-5 mortality and homicide rates. What relationship, if any, exists between gender equity and broader social outcomes? Could a stronger focus on pay parity contribute to improvements in public health and safety, or are these patterns driven by deeper, more complex forces?</p>
 <p>As New Zealand considers its future priorities, this analysis invites a wider conversation about the links between equity, wellbeing, and societal resilience. Overall I would give us a B- - not the worst in the world, but a way to go to be the best.</p>
@@ -77,15 +115,8 @@ legal and healthcare factors likely play a much larger role.</p>
 </div>
       <footer id="footer">
         <div class="inner">
-          <!-- <section>
-           <h2>Follow</h2>
-            <ul class="icons">
-              <li><a href="https://twitter.com/psymeg" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
-              <li><a href=""https://github.com/psymeg" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
-            </ul>
-          </section> -->
           <ul class="copyright">
-            <li>&copy; 2025 Indarien Publishing Aotearoa New Zealand. All rights reserved</li>
+            <li>&copy; 2026 Indarien Publishing Aotearoa New Zealand. All rights reserved</li>
             <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
           </ul>
         </div>

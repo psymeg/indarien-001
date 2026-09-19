@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Repolister</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+      .stack-badges { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 20px 0; }
+      .stack-badges span { background: #222; color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-family: monospace; }
+      .pipeline-steps { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin: 30px 0; }
+      .pipeline-steps div { flex: 1; min-width: 200px; max-width: 260px; border: 1px solid #ddd; border-radius: 6px; padding: 16px; text-align: center; }
+      .pipeline-steps h4 { margin: 0 0 8px 0; }
+      pre.session { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; line-height: 1.5; }
+    </style>
+  </head>
+  <body class="is-preload">
+<!-- Wrapper -->
+  <div id="wrapper">
+<!-- Header -->
+  <header id="header">
+  <div class="inner">
+
+  <a href="index.html" class="logo">
+  <span class="symbol"><img src="images/Indarien_Logo_Colour.png" alt="Indarien LTD" /></span><span class="title">Indarien</span>
+  </a>
+  <nav>
+    <ul>
+            <li><a href="#menu">Menu</a></li>
+    </ul>
+  </nav>
+</div>
+</header>
+<!-- Menu -->
+<nav id="menu">
+<h2>Menu</h2>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="emily.html">Emily and the Anteater</a></li>
+  <li><a href="agile.html">Agile Picture Book</a></li>
+  <li><a href="hrhandbook.html">The HR Handbook</a></li>
+  <li><a href="repolister.html">Repolister</a></li>
+  <li><a href="shakespeare-map.html">Mapping Shakespeare</a></li>
+  <li><a href="pay-parity.html">Pay Parity</a></li>
+  <li><a href="about.html">About</a></li>
+</ul>
+</nav>
+<!-- Main -->
+  <div id="main">
+    <div class="inner">
+
+      <h1 align="center">Repolister</h1>
+      <h2 align="center">A local RAG pipeline for interrogating GitHub repositories</h2>
+
+      <span class="image main"><img src="https://github.com/user-attachments/assets/270b8a96-2211-4c91-8604-9a1b23fe3ea0" alt="Repolister screenshot" /></span>
+
+      <p>Repolister is a Python application that lets you clone a GitHub repository, chunk it at function level, embed it locally, and query it in plain English &mdash; or Japanese, or Chinese, depending on how the prompt is configured. It's built on top of the Ragtime document pipeline, sharing the same PostgreSQL database, embedding model, and Ollama LLM.</p>
+
+      <div class="stack-badges">
+        <span>Python 3.9+</span>
+        <span>PostgreSQL + pgvector</span>
+        <span>Ollama / qwen2.5:7b</span>
+        <span>Docker Compose</span>
+        <span>NVIDIA GPU</span>
+      </div>
+
+      <h3 align="center">How it works</h3>
+      <p>Repolister loads a repository through a bronze/silver/gold pipeline:</p>
+
+      <div class="pipeline-steps">
+        <div>
+          <h4>Bronze</h4>
+          <p>Raw source files, keyed by repo URL and file path.</p>
+        </div>
+        <div>
+          <h4>Silver</h4>
+          <p>Function-level chunks, with roxygen2 docs attached.</p>
+        </div>
+        <div>
+          <h4>Gold</h4>
+          <p>Embeddings via <code>intfloat/multilingual-e5-large</code>, stored in pgvector.</p>
+        </div>
+      </div>
+
+      <p>At query time, Repolister embeds your question, retrieves the most relevant function chunks, and asks a local LLM to synthesise an answer &mdash; citing the source files it drew from.</p>
+
+      <h3 align="center">Example session</h3>
+
+<pre class="session">Loading intfloat/multilingual-e5-large on cuda...
+  ✓ Ready — querying https://github.com/UchidaMizuki/jpstat
+
+Q: how do I filter data by prefecture?
+
+  Retrieved 6 chunks (closest: 0.1664)
+
+A: To filter data by prefecture, use the activate() function to select
+   the area key, then filter() to specify the prefecture name or code.
+   For example, to filter for Tokyo and Osaka (R/estat.R):
+
+   census |&gt;
+     activate(area) |&gt;
+     rekey("pref") |&gt;
+     filter(name %in% c("東京都", "大阪府")) |&gt;
+     select(code, name)</pre>
+
+      <p>Currently, Repolister supports R (<code>.r</code>) and R Markdown (<code>.rmd</code>) repositories out of the box, chunked per function or per code fence / prose section. Adding another language means extending the chunker and the supported extensions list.</p>
+
+      <p align="center">Full setup instructions (Docker and manual), configuration options, and troubleshooting notes are in the README on GitHub.</p>
+
+      <ul class="actions" style="justify-content:center; display:flex;">
+        <li><a href="https://github.com/psymeg/repolister" class="button primary">View on GitHub</a></li>
+      </ul>
+
+    </div>
+  </div>
+          <footer id="footer">
+            <div class="inner">
+              <ul class="copyright">
+                <li>&copy; 2026 Indarien Publishing Aotearoa New Zealand. All rights reserved</li>
+                <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+              </ul>
+            </div>
+          </footer>
+
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/header.js"></script>
+  </body>
+</html>
