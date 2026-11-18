@@ -1,0 +1,334 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Train Pass Calculator</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <style>
+      .tp { max-width: 1000px; margin: 0 auto; }
+      .tp-settings { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 24px 0 8px 0; }
+      .tp-field { border: 1px solid #ddd; border-radius: 6px; padding: 8px 12px; }
+      .tp-field span.tp-cap { display: block; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: #777; margin-bottom: 2px; }
+      .tp-field .tp-in { display: flex; align-items: center; gap: 4px; font-family: monospace; }
+      .tp .tp-field input { border: 0; box-shadow: none; background: transparent; height: auto; padding: 0; font-family: monospace; font-size: 1rem; width: 100%; }
+      .tp-note { font-size: 0.75rem; color: #777; margin: 0 0 24px 0; }
+
+      .tp-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-bottom: 24px; }
+      .tp-day { border: 1px solid #ddd; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; background: #fff; }
+      .tp-dayhead { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.9rem; }
+      .tp-dayhead .tp-tools button { background: none; border: 0; box-shadow: none; padding: 0 4px; height: auto; line-height: 1; color: #999; font-size: 0.9rem; cursor: pointer; }
+      .tp-dayhead .tp-tools button:hover { color: #222; }
+      .tp-leg { display: flex; flex-direction: column; gap: 4px; }
+      .tp .tp-leg input.tp-label { height: auto; padding: 4px 6px; font-size: 0.7rem; border-radius: 4px; box-shadow: inset 0 0 0 1px #ddd; border: 0; width: 100%; }
+      .tp .tp-leg button.tp-state { height: auto; line-height: 1.2; padding: 7px 6px; font-size: 0.72rem; font-weight: 700; border-radius: 4px; width: 100%; cursor: pointer; text-transform: none; letter-spacing: 0; box-shadow: none; }
+      .tp .tp-state.peak { background: #F2A93B; color: #1A1508; border: 1px solid #F2A93B; }
+      .tp .tp-state.offpeak { background: #4FD1AE; color: #04231C; border: 1px solid #4FD1AE; }
+      .tp .tp-state.skip { background: transparent; color: #888; border: 1px dashed #bbb; }
+      .tp-legrow { display: flex; gap: 4px; align-items: center; }
+      .tp .tp-legrow .tp-rm { background: none; border: 0; box-shadow: none; height: auto; padding: 0 4px; color: #aaa; cursor: pointer; width: auto; font-size: 0.8rem; line-height: 1; }
+      .tp .tp-legrow .tp-rm:hover { color: #c0392b; }
+      .tp .tp-add { height: auto; line-height: 1.2; padding: 6px; font-size: 0.7rem; background: transparent; border: 1px dashed #bbb; color: #888; border-radius: 4px; box-shadow: none; cursor: pointer; text-transform: none; letter-spacing: 0; width: 100%; margin-top: auto; }
+      .tp .tp-add:hover { color: #222; border-color: #777; }
+
+      .tp-board { border: 1px solid #ddd; border-radius: 6px; padding: 20px; background: #1e1e1e; color: #d4d4d4; }
+      .tp-flaps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; text-align: center; }
+      .tp-flap { font-family: monospace; font-size: 2rem; font-weight: 700; background: #141414; border: 1px solid #333; border-radius: 6px; padding: 6px 0; }
+      .tp-flapcap { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: #888; margin-top: 4px; }
+      .tp-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+      .tp-barhead { display: flex; justify-content: space-between; font-size: 0.8rem; color: #aaa; margin-bottom: 4px; }
+      .tp-barhead b { font-family: monospace; color: #fff; }
+      .tp-track { height: 10px; border-radius: 5px; background: #111; overflow: hidden; }
+      .tp-fill { height: 100%; width: 0; transition: width 0.25s; }
+      .tp-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; font-size: 0.8rem; }
+      .tp-facts span { display: block; color: #888; }
+      .tp-facts b { font-family: monospace; color: #fff; font-weight: 400; font-size: 0.95rem; }
+      .tp-verdict { border-radius: 6px; padding: 12px 16px; font-weight: 700; font-size: 0.9rem; border: 1px solid #444; color: #aaa; }
+      .tp-verdict.pass { border-color: #4FD1AE; color: #4FD1AE; background: rgba(79,209,174,0.1); }
+      .tp-verdict.payg { border-color: #F2A93B; color: #F2A93B; background: rgba(242,169,59,0.1); }
+
+      @media (max-width: 980px) { .tp-week { grid-template-columns: repeat(4, 1fr); } .tp-settings { grid-template-columns: repeat(2, 1fr); } }
+      @media (max-width: 600px) { .tp-week { grid-template-columns: repeat(2, 1fr); } .tp-bars, .tp-facts { grid-template-columns: 1fr; } .tp-flap { font-size: 1.5rem; } }
+    </style>
+  </head>
+  <body class="is-preload">
+<!-- Wrapper -->
+  <div id="wrapper">
+<!-- Header -->
+  <header id="header">
+  <div class="inner">
+
+  <a href="index.html" class="logo">
+  <span class="symbol"><img src="images/Indarien_Logo_Colour.png" alt="Indarien LTD" /></span><span class="title">Indarien</span>
+  </a>
+  <nav>
+    <ul>
+            <li><a href="#menu">Menu</a></li>
+    </ul>
+  </nav>
+</div>
+</header>
+<!-- Menu -->
+<nav id="menu">
+<h2>Menu</h2>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="emily.html">Emily and the Anteater</a></li>
+  <li><a href="agile.html">Agile Picture Book</a></li>
+  <li><a href="hrhandbook.html">The HR Handbook</a></li>
+  <li><a href="repolister.html">Repolister</a></li>
+  <li><a href="shakespeare-map.html">Mapping Shakespeare</a></li>
+  <li><a href="pay-parity.html">Pay Parity</a></li>
+  <li><a href="train-pass.html">Train Pass Calculator</a></li>
+  <li><a href="about.html">About</a></li>
+</ul>
+</nav>
+<!-- Main -->
+  <div id="main">
+    <div class="inner">
+
+      <h1 align="center">Is the train pass worth it?</h1>
+      <h2 align="center">Mark each leg of your week and compare a period pass with paying as you go</h2>
+
+      <div class="tp">
+        <p align="center">Click a leg to cycle it through <strong>Peak</strong>, <strong>Off-peak</strong> and <strong>No train</strong>. Use <em>Add leg</em> for one-off trips, and rename legs to suit (for example &ldquo;Fencing &ndash; train home&rdquo;).</p>
+
+        <div class="tp-settings">
+          <div class="tp-field"><span class="tp-cap">Peak fare</span><div class="tp-in">$<input type="number" id="tp-peak" step="0.01" min="0" /></div></div>
+          <div class="tp-field"><span class="tp-cap">Off-peak fare</span><div class="tp-in">$<input type="number" id="tp-offpeak" step="0.01" min="0" /></div></div>
+          <div class="tp-field"><span class="tp-cap">Pass price</span><div class="tp-in">$<input type="number" id="tp-pass" step="0.01" min="0" /></div></div>
+          <div class="tp-field"><span class="tp-cap">Pass length (days)</span><div class="tp-in"><input type="number" id="tp-days" step="1" min="1" /></div></div>
+        </div>
+        <p class="tp-note">Defaults are ballpark Metlink Wellington fares after the May 2026 increase. Replace them with your own station-to-station fares and the actual 30-day pass price for your zones. Fares are per one-way leg.</p>
+
+        <div class="tp-week" id="tp-week"></div>
+
+        <div class="tp-board">
+          <div class="tp-flaps">
+            <div><div class="tp-flap" id="tp-n-peak" style="color:#F2A93B">0</div><div class="tp-flapcap">Peak legs / wk</div></div>
+            <div><div class="tp-flap" id="tp-n-off" style="color:#4FD1AE">0</div><div class="tp-flapcap">Off-peak legs / wk</div></div>
+            <div><div class="tp-flap" id="tp-n-skip" style="color:#777">0</div><div class="tp-flapcap">Skipped legs / wk</div></div>
+          </div>
+
+          <div class="tp-bars">
+            <div>
+              <div class="tp-barhead"><span id="tp-lbl-payg">Pay as you go</span><b id="tp-v-payg">$0.00</b></div>
+              <div class="tp-track"><div class="tp-fill" id="tp-b-payg" style="background:#F2A93B"></div></div>
+            </div>
+            <div>
+              <div class="tp-barhead"><span id="tp-lbl-pass">Pass</span><b id="tp-v-pass">$0.00</b></div>
+              <div class="tp-track"><div class="tp-fill" id="tp-b-pass" style="background:#4FD1AE"></div></div>
+            </div>
+          </div>
+
+          <div class="tp-facts">
+            <div><span>Weekly cost, pay as you go</span><b id="tp-f-week">$0.00</b></div>
+            <div><span>Weekly-equivalent pass cost</span><b id="tp-f-passweek">$0.00</b></div>
+            <div><span>Trips needed to break even</span><b id="tp-f-be">&mdash;</b></div>
+          </div>
+
+          <div class="tp-verdict" id="tp-verdict"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+          <footer id="footer">
+            <div class="inner">
+              <ul class="copyright">
+                <li>&copy; 2026 Indarien Publishing Aotearoa New Zealand. All rights reserved</li>
+                <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+              </ul>
+            </div>
+          </footer>
+
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/header.js"></script>
+    <script>
+    (function () {
+      var DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      var CYCLE = ['peak', 'offpeak', 'skip'];
+      var NAMES = { peak: 'Peak', offpeak: 'Off-peak', skip: 'No train' };
+      var STORE_KEY = 'trainPassCalc.v1';
+
+      var seq = 0;
+      function newLeg(label, state) {
+        seq += 1;
+        return { id: 'l' + Date.now().toString(36) + seq, label: label, state: state || 'peak' };
+      }
+      function defaultDay(d) {
+        return (d === 'Sat' || d === 'Sun') ? [] : [newLeg('Morning'), newLeg('Evening')];
+      }
+
+      var schedule = {};
+      DAYS.forEach(function (d) { schedule[d] = defaultDay(d); });
+      var settings = { peak: 6.07, offpeak: 4.86, pass: 190, days: 30 };
+
+      // --- persistence (fails quietly if storage is blocked) ---
+      function save() {
+        try { localStorage.setItem(STORE_KEY, JSON.stringify({ schedule: schedule, settings: settings })); } catch (e) {}
+      }
+      function load() {
+        try {
+          var raw = localStorage.getItem(STORE_KEY);
+          if (!raw) return;
+          var data = JSON.parse(raw);
+          if (data && data.settings) {
+            ['peak', 'offpeak', 'pass', 'days'].forEach(function (k) {
+              if (typeof data.settings[k] === 'number' && isFinite(data.settings[k])) settings[k] = data.settings[k];
+            });
+          }
+          if (data && data.schedule) {
+            DAYS.forEach(function (d) {
+              var legs = data.schedule[d];
+              if (!Array.isArray(legs)) return;
+              schedule[d] = legs.map(function (l) {
+                return newLeg(String(l.label || ''), CYCLE.indexOf(l.state) >= 0 ? l.state : 'peak');
+              });
+            });
+          }
+        } catch (e) {}
+      }
+
+      function esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+      function money(n) { return '$' + n.toFixed(2); }
+      function $(id) { return document.getElementById(id); }
+
+      // --- week grid ---
+      function renderWeek() {
+        var html = '';
+        DAYS.forEach(function (d) {
+          html += '<div class="tp-day" data-day="' + d + '">' +
+            '<div class="tp-dayhead"><span>' + d + '</span><span class="tp-tools">' +
+            '<button type="button" data-act="clear" title="Mark whole day as no train">&times;</button>' +
+            '<button type="button" data-act="reset" title="Reset day to default">&#8634;</button></span></div>';
+          schedule[d].forEach(function (leg) {
+            html += '<div class="tp-leg" data-leg="' + leg.id + '">' +
+              '<div class="tp-legrow"><input class="tp-label" type="text" value="' + esc(leg.label) + '" aria-label="Leg name" />' +
+              '<button type="button" class="tp-rm" data-act="remove" title="Remove leg">&times;</button></div>' +
+              '<button type="button" class="tp-state ' + leg.state + '" data-act="cycle">' + NAMES[leg.state] + '</button></div>';
+          });
+          html += '<button type="button" class="tp-add" data-act="add">+ Add leg</button></div>';
+        });
+        $('tp-week').innerHTML = html;
+      }
+
+      function findLeg(day, id) {
+        for (var i = 0; i < schedule[day].length; i++) if (schedule[day][i].id === id) return i;
+        return -1;
+      }
+
+      $('tp-week').addEventListener('click', function (e) {
+        var btn = e.target.closest('button[data-act]');
+        if (!btn) return;
+        var dayEl = btn.closest('.tp-day');
+        var day = dayEl.getAttribute('data-day');
+        var legEl = btn.closest('.tp-leg');
+        var act = btn.getAttribute('data-act');
+        if (act === 'cycle') {
+          var i = findLeg(day, legEl.getAttribute('data-leg'));
+          var leg = schedule[day][i];
+          leg.state = CYCLE[(CYCLE.indexOf(leg.state) + 1) % CYCLE.length];
+          btn.className = 'tp-state ' + leg.state;
+          btn.textContent = NAMES[leg.state];
+        } else if (act === 'remove') {
+          schedule[day].splice(findLeg(day, legEl.getAttribute('data-leg')), 1);
+          renderWeek();
+        } else if (act === 'add') {
+          schedule[day].push(newLeg('Extra trip'));
+          renderWeek();
+        } else if (act === 'clear') {
+          schedule[day].forEach(function (l) { l.state = 'skip'; });
+          renderWeek();
+        } else if (act === 'reset') {
+          schedule[day] = defaultDay(day);
+          renderWeek();
+        }
+        update();
+      });
+
+      // Label edits don't change totals, so just store them (no re-render, keeps focus).
+      $('tp-week').addEventListener('input', function (e) {
+        if (!e.target.classList.contains('tp-label')) return;
+        var day = e.target.closest('.tp-day').getAttribute('data-day');
+        var i = findLeg(day, e.target.closest('.tp-leg').getAttribute('data-leg'));
+        if (i >= 0) { schedule[day][i].label = e.target.value; save(); }
+      });
+
+      // --- settings ---
+      var fields = { 'tp-peak': 'peak', 'tp-offpeak': 'offpeak', 'tp-pass': 'pass', 'tp-days': 'days' };
+      Object.keys(fields).forEach(function (id) {
+        $(id).addEventListener('input', function () {
+          var v = parseFloat($(id).value);
+          settings[fields[id]] = isFinite(v) && v >= 0 ? v : 0;
+          update();
+        });
+      });
+
+      // --- calculations ---
+      function update() {
+        var peak = 0, off = 0, skip = 0;
+        DAYS.forEach(function (d) {
+          schedule[d].forEach(function (l) {
+            if (l.state === 'peak') peak++; else if (l.state === 'offpeak') off++; else skip++;
+          });
+        });
+        var trips = peak + off;
+        var weekly = peak * settings.peak + off * settings.offpeak;
+        var weeks = settings.days > 0 ? settings.days / 7 : 0;
+        var cycle = weekly * weeks;
+        var diff = cycle - settings.pass;
+        var avg = trips > 0 ? weekly / trips : 0;
+        var be = avg > 0 ? settings.pass / avg : 0;
+        var passWeek = weeks > 0 ? settings.pass / weeks : 0;
+        var max = Math.max(cycle, settings.pass, 1);
+
+        $('tp-n-peak').textContent = peak;
+        $('tp-n-off').textContent = off;
+        $('tp-n-skip').textContent = skip;
+        $('tp-lbl-payg').textContent = 'Pay as you go (' + settings.days + ' days)';
+        $('tp-lbl-pass').textContent = settings.days + '-day pass';
+        $('tp-v-payg').textContent = money(cycle);
+        $('tp-v-pass').textContent = money(settings.pass);
+        $('tp-b-payg').style.width = Math.min(100, cycle / max * 100) + '%';
+        $('tp-b-pass').style.width = Math.min(100, settings.pass / max * 100) + '%';
+        $('tp-f-week').textContent = money(weekly);
+        $('tp-f-passweek').textContent = money(passWeek);
+        // break-even is expressed per week, as in "legs per week needed"
+        $('tp-f-be').innerHTML = trips > 0 && weeks > 0 ? (be / weeks).toFixed(1) + ' legs / wk' : '&mdash;';
+
+        var v = $('tp-verdict');
+        v.className = 'tp-verdict';
+        if (trips === 0) {
+          v.textContent = 'No legs scheduled yet. Mark a few trips above to see the numbers.';
+        } else if (diff > 1) {
+          v.className += ' pass';
+          v.textContent = 'Buy the pass: it saves you ' + money(diff) + ' over ' + settings.days + ' days at this schedule.';
+        } else if (diff < -1) {
+          v.className += ' payg';
+          v.textContent = 'Skip the pass: paying as you go saves you ' + money(Math.abs(diff)) + ' over ' + settings.days + ' days.';
+        } else {
+          v.textContent = 'It is basically a wash: about ' + money(Math.abs(diff)) + ' difference either way.';
+        }
+        save();
+      }
+
+      load();
+      $('tp-peak').value = settings.peak;
+      $('tp-offpeak').value = settings.offpeak;
+      $('tp-pass').value = settings.pass;
+      $('tp-days').value = settings.days;
+      renderWeek();
+      update();
+    })();
+    </script>
+  </body>
+</html>
