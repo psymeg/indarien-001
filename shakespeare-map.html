@@ -186,14 +186,6 @@ legend.onAdd = function (map) {
 
 legend.addTo(map);
 
-        // Character Movements (simple lines)
-        var movements = [
-            [[45.4408, 12.3155], [35.1856, 33.3823]], // Othello: Venice -> Cyprus
-            [[54.4, 10.0], [55.6847, 12.5936]], // Hamlet: Wittenberg (approx) -> Elsinore
-        ];
-        movements.forEach(function(path) {
-            L.polyline(path, {color: 'black', weight: 2, opacity: 0.6, dashArray: '5,5'}).addTo(map);
-        });
 
     </script>
 </div>
